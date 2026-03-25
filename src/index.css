@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  /* Peel-inspired palette */
+  --color-peel-navy: #1a1f36;
+  --color-peel-dark: #2d3148;
+  --color-peel-blue: #4c6ef5;
+  --color-peel-blue-light: #edf2ff;
+  --color-peel-green: #22c55e;
+  --color-peel-green-light: #f0fdf4;
+  --color-peel-red: #ef4444;
+  --color-peel-red-light: #fef2f2;
+  --color-peel-amber: #f59e0b;
+  --color-peel-amber-light: #fffbeb;
+  --color-peel-gray-50: #f9fafb;
+  --color-peel-gray-100: #f3f4f6;
+  --color-peel-gray-200: #e5e7eb;
+  --color-peel-gray-300: #d1d5db;
+  --color-peel-gray-400: #9ca3af;
+  --color-peel-gray-500: #6b7280;
+  --color-peel-gray-600: #4b5563;
+  --color-peel-gray-700: #374151;
+  --color-peel-gray-800: #1f2937;
+  --color-peel-gray-900: #111827;
+
+  --font-heading: 'Montserrat', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-peel-gray-50);
+    color: var(--color-peel-gray-800);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-peel-navy);
+  }
+}
