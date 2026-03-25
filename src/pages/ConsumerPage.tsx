@@ -100,8 +100,7 @@ export default function ConsumerPage({ user, data, token }: Props) {
     <div className="flex min-h-screen">
       <Sidebar user={user} activeTab={activeTab} onTabChange={setActiveTab} tabs={CONSUMER_TABS} onReset={async () => {
         await resetDemoData()
-        const fresh = await getConsumerData(token)
-        if (fresh) setLiveData(fresh)
+        window.location.reload()
       }} />
 
       <main className="flex-1 p-8 overflow-auto">

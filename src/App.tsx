@@ -69,5 +69,5 @@ export default function App() {
     return <ConsumerPage user={user} data={data} token={token} />
   }
 
-  return <MerchantPage user={user} data={data} token={token} />
+  return <MerchantPage user={user} data={data} />
 }
