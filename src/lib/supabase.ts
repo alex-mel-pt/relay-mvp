@@ -41,3 +41,10 @@ export async function submitCheckin(token: string, orderId: string, inventoryLev
   if (error) return { error: error.message }
   return data
 }
+
+/** Reset all demo data to initial seed state */
+export async function resetDemoData() {
+  const { data, error } = await supabase.rpc('reset_demo_data')
+  if (error) return { error: error.message }
+  return data
+}

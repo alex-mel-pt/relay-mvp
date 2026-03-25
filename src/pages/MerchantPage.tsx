@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { User, Order, Checkin, DeliverySchedule, Transaction } from '../lib/types'
+import { resetDemoData, getMerchantData } from '../lib/supabase'
 import Sidebar from '../components/Sidebar'
 import StatCard from '../components/StatCard'
 import IMessageCard from '../components/IMessageCard'
@@ -18,6 +19,7 @@ interface MerchantData {
 interface Props {
   user: User
   data: MerchantData
+  token: string
 }
 
 const MERCHANT_TABS = [
@@ -138,8 +140,9 @@ function computeMetrics(
 
 // ─── Component ──────────────────────────────────────────────────
 
-export default function MerchantPage({ user, data }: Props) {
+export default function MerchantPage({ user, data, token }: Props) {
   const [activeTab, setActiveTab] = useState('overview')
+  const [liveData, setLiveData] = useState(data)
   const [skuFilter, setSkuFilter] = useState<string>('all')
   const [activeSku, setActiveSku] = useState<string | null>(null)
 
@@ -151,11 +154,11 @@ export default function MerchantPage({ user, data }: Props) {
   const [mlShowSavings, setMlShowSavings] = useState(true)
   const [mlShowLink, setMlShowLink] = useState(true)
 
-  const users = data.users || []
-  const orders = data.orders || []
-  const checkins = data.checkins || []
-  const deliveries = data.delivery_schedule || []
-  const transactions = data.transactions || []
+  const users = liveData.users || []
+  const orders = liveData.orders || []
+  const checkins = liveData.checkins || []
+  const deliveries = liveData.delivery_schedule || []
+  const transactions = liveData.transactions || []
 
   // Apply SKU filter to relevant data
   const filteredOrders = skuFilter === 'all' ? orders : orders.filter(o => o.product_name === skuFilter)
@@ -170,7 +173,11 @@ export default function MerchantPage({ user, data }: Props) {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar user={user} activeTab={activeTab} onTabChange={setActiveTab} tabs={MERCHANT_TABS} />
+      <Sidebar user={user} activeTab={activeTab} onTabChange={setActiveTab} tabs={MERCHANT_TABS} onReset={async () => {
+        await resetDemoData()
+        const fresh = await getMerchantData(token)
+        if (fresh) setLiveData(fresh)
+      }} />
 
       <main className="flex-1 p-8 overflow-auto">
         {/* Header */}

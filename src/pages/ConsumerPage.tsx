@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { User, Order, Checkin, DeliverySchedule, CheckinSchedule, Transaction } from '../lib/types'
-import { submitCheckin, getConsumerData } from '../lib/supabase'
+import { submitCheckin, getConsumerData, resetDemoData } from '../lib/supabase'
 import Sidebar from '../components/Sidebar'
 import StatCard from '../components/StatCard'
 
@@ -98,7 +98,11 @@ export default function ConsumerPage({ user, data, token }: Props) {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar user={user} activeTab={activeTab} onTabChange={setActiveTab} tabs={CONSUMER_TABS} />
+      <Sidebar user={user} activeTab={activeTab} onTabChange={setActiveTab} tabs={CONSUMER_TABS} onReset={async () => {
+        await resetDemoData()
+        const fresh = await getConsumerData(token)
+        if (fresh) setLiveData(fresh)
+      }} />
 
       <main className="flex-1 p-8 overflow-auto">
         {/* Success toast */}

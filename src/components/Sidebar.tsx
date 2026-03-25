@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { User } from '../lib/types'
 
 interface SidebarProps {
@@ -5,9 +6,11 @@ interface SidebarProps {
   activeTab: string
   onTabChange: (tab: string) => void
   tabs: { id: string; label: string; icon: string }[]
+  onReset?: () => Promise<void>
 }
 
-export default function Sidebar({ user, activeTab, onTabChange, tabs }: SidebarProps) {
+export default function Sidebar({ user, activeTab, onTabChange, tabs, onReset }: SidebarProps) {
+  const [resetting, setResetting] = useState(false)
   const isAdmin = user.role === 'merchant'
 
   return (
@@ -59,6 +62,27 @@ export default function Sidebar({ user, activeTab, onTabChange, tabs }: SidebarP
               {isAdmin ? user.brand_name : user.email}
             </div>
           </div>
+        </div>
+
+        {/* Data Reset — demo only */}
+        {onReset && (
+          <button
+            disabled={resetting}
+            onClick={async () => {
+              setResetting(true)
+              await onReset()
+              setResetting(false)
+            }}
+            className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-white/5 transition-colors text-xs disabled:opacity-40"
+          >
+            <svg className={`w-3.5 h-3.5 ${resetting ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {resetting ? 'Resetting...' : 'Data Reset'}
+          </button>
+        )}
+        <div className="mt-1.5 text-center text-[10px] text-white/20">
+          for demo purposes only
         </div>
       </div>
     </aside>
